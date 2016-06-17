@@ -1,0 +1,28 @@
+{
+    "id": "https://github.com/yuichi1004/localschemaloader/test/scheme1.json",
+    "$schema": "http://json-schema.org/draft-04/hyper-schema#",
+    "title": "Test Scheme 1",
+    "definitions": {
+        "shortString": {
+            "type": "string",
+            "maxLength": 6
+        }
+    },
+    "type": "object",
+    "properties": {
+        "id": {
+            "title": "id of this object",
+            "oneOf": [
+                { "$ref": "https://github.com/yuichi1004/localschemaloader/test/common_types.json#/definitions/positiveInteger" }
+            ]
+        },
+        "value": {
+            "title": "value of this object",
+            "anyOf": [
+                { "$ref": "#/definitions/shortString" },
+                { "$ref": "https://github.com/yuichi1004/localschemaloader/test/common_types.json#/definitions/base64Str" }
+            ]
+        }
+    },
+    "additionalProperties": false
+}

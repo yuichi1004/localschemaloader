@@ -1,0 +1,20 @@
+{
+    "id": "https://github.com/yuichi1004/localschemaloader/test/common_types.json",
+    "$schema": "http://json-schema.org/draft-04/hyper-schema#",
+    "title": "Common Schema",
+    "definitions": {
+        "positiveInt": {
+            "type": "integer",
+            "minimum": 1
+        },
+        "base64Str": {
+            "title": "Base64 encoded string",
+            "description": "https://tools.ietf.org/html/rfc4648#section-4",
+            "type": "string",
+            "pattern": "^[0-9a-zA-Z+/]+={0,2}$"
+        },
+        "positiveInteger": {
+            "$ref": "#/definitions/positiveInt"
+        }
+    }
+}
