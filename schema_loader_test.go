@@ -1,8 +1,9 @@
-package localschemaloder
+package localschemaloader
 
 import (
-	"testing"
 	"log"
+	"testing"
+
 	"github.com/yuichi1004/gojsonschema"
 )
 
@@ -18,26 +19,25 @@ func TestBasic(t *testing.T) {
 	)
 
 	test := TestObj{
-		Id: 1,
+		Id:    1,
 		Value: "tiny",
 	}
 
 	schemaLoader := factory.New("https://github.com/yuichi1004/localschemaloader/test/scheme1.json")
-    documentLoader := gojsonschema.NewGoLoader(test)
+	documentLoader := gojsonschema.NewGoLoader(test)
 
-    result, err := gojsonschema.Validate(schemaLoader, documentLoader)
-    if err != nil {
-        panic(err.Error())
-    }
+	result, err := gojsonschema.Validate(schemaLoader, documentLoader)
+	if err != nil {
+		panic(err.Error())
+	}
 
-    if result.Valid() {
-        log.Printf("The document is valid\n")
-    } else {
-        log.Printf("The document is not valid. see errors :\n")
-        for _, desc := range result.Errors() {
-            t.Errorf("- %s\n", desc)
-        }
-    }
+	if result.Valid() {
+		log.Printf("The document is valid\n")
+	} else {
+		log.Printf("The document is not valid. see errors :\n")
+		for _, desc := range result.Errors() {
+			t.Errorf("- %s\n", desc)
+		}
+	}
 
 }
-

@@ -1,12 +1,13 @@
-package localschemaloder
+package localschemaloader
 
 import (
 	"bytes"
-	"os"
-	"strings"
+	"encoding/json"
 	"io"
 	"io/ioutil"
-	"encoding/json"
+	"os"
+	"strings"
+
 	"github.com/xeipuuv/gojsonreference"
 	"github.com/yuichi1004/gojsonschema"
 )
@@ -19,24 +20,23 @@ type LocalSchemaLoaderFactory struct {
 
 type LocalSchemaLoader struct {
 	gojsonschema.JSONLoader
-	source string
+	source  string
 	factory LocalSchemaLoaderFactory
 }
 
 func New(urlBasePath, fileBasePath string) LocalSchemaLoaderFactory {
 	return LocalSchemaLoaderFactory{
-		urlBasePath: urlBasePath,
+		urlBasePath:  urlBasePath,
 		fileBasePath: fileBasePath,
 	}
 }
-
 
 func (f LocalSchemaLoaderFactory) New(source string) gojsonschema.JSONLoader {
 	if f.urlBasePath == "" {
 		panic("")
 	}
 	return &LocalSchemaLoader{
-		source: source,
+		source:  source,
 		factory: f,
 	}
 }
@@ -100,4 +100,3 @@ func decodeJsonUsingNumber(r io.Reader) (interface{}, error) {
 	return document, nil
 
 }
-
