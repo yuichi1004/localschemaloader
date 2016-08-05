@@ -1,10 +1,8 @@
 package localschemaloader
 
 import (
-	"bytes"
 	"encoding/json"
 	"io"
-	"io/ioutil"
 	"os"
 	"strings"
 
@@ -54,15 +52,12 @@ func (l *LocalSchemaLoader) LoadJSON() (interface{}, error) {
 	refToUrl.GetUrl().Fragment = ""
 	source := refToUrl.String()
 	dest := strings.Replace(source, l.factory.urlBasePath, l.factory.fileBasePath, 1)
-	document, err := l.loadFromFile(dest)
-	if err != nil {
-		return nil, err
-	}
-	return document, nil
+
+	return l.loadFromFile(dest)
 }
 
 func (l *LocalSchemaLoader) JsonReference() (gojsonreference.JsonReference, error) {
-	return gojsonreference.NewJsonReference(l.JsonSource().(string))
+	return gojsonreference.NewJsonReference(l.source)
 }
 
 func (l *LocalSchemaLoader) LoaderFactory() gojsonschema.JSONLoaderFactory {
@@ -76,13 +71,7 @@ func (l *LocalSchemaLoader) loadFromFile(path string) (interface{}, error) {
 	}
 	defer f.Close()
 
-	bodyBuff, err := ioutil.ReadAll(f)
-	if err != nil {
-		return nil, err
-	}
-
-	return decodeJsonUsingNumber(bytes.NewReader(bodyBuff))
-
+	return decodeJsonUsingNumber(f)
 }
 
 func decodeJsonUsingNumber(r io.Reader) (interface{}, error) {
@@ -92,8 +81,7 @@ func decodeJsonUsingNumber(r io.Reader) (interface{}, error) {
 	decoder := json.NewDecoder(r)
 	decoder.UseNumber()
 
-	err := decoder.Decode(&document)
-	if err != nil {
+	if err := decoder.Decode(&document); err != nil {
 		return nil, err
 	}
 
